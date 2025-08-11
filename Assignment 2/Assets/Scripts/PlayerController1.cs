@@ -18,10 +18,6 @@ public class PlayerController : MonoBehaviour
     public float powerShotCooldown = 180f;      // 3 minutes
     private float powerShotTimer = 0f;
 
-    // private Animator animator;
-    // public float interactRange = 2f;
-    // public LayerMask interactableLayer;
-
     private Vector2 lastAimDirection = Vector2.right;
 
     private float shootTimer = 0f;
@@ -32,20 +28,7 @@ public class PlayerController : MonoBehaviour
     private bool shootPressed;
     private bool dashPressed;
 
-    // public float dashSpeed = 8f;
-    // public float dashDuration = 0.25f;
-    // public float dashCooldown = 0.75f;
-
-    // private bool isDashing = false;
-     private bool isAttacking = false;
-
-    // private float dashTimer = 0f;
-    // private float dashCooldownTimer = 0f;
-    // private Vector2 dashDirection;
-
-    // public float lockOnRange = 5f;
-    // public LayerMask enemyLayer;
-    // private Transform lockedOnTarget;
+    private bool isAttacking = false;
 
     [Header("Shooting")]
     public GameObject projectilePrefab;
@@ -71,20 +54,20 @@ public class PlayerController : MonoBehaviour
 
     public Sprite shrinkSprite;                  // sprite when shrunk
 
-
     private bool isShrunk = false;
 
     private float normalSpeed;
 
     private Vector3 normalScale;
 
+    // New variable for rocket movement direction
+    private Vector2 rocketMoveDirection = Vector2.up;
 
     private void Awake()
     {
         controls = new Control();
         rbody = GetComponent<Rigidbody2D>();
-        normalScale = transform.localScale; 
-        //animator = GetComponentInChildren<Animator>();
+        normalScale = transform.localScale;
     }
 
     private void OnEnable()
@@ -99,25 +82,18 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (isTransformed)
+        {
+            // Move rocket automatically in rocketMoveDirection at a set rocket speed
+            float rocketSpeed = 10f;  // Adjust speed as needed
+            Vector2 newPos = rbody.position + rocketMoveDirection * rocketSpeed * Time.fixedDeltaTime;
+            rbody.MovePosition(newPos);
+            return; // Skip normal movement while transformed
+        }
+
         Vector2 currentPos = rbody.position;
         Vector2 movement = Vector2.zero;
 
-        // if (isDashing)
-        // {
-        //     dashTimer -= Time.fixedDeltaTime;
-        //     movement = dashDirection * dashSpeed;
-
-        //     if (dashTimer <= 0f)
-        //     {
-        //         isDashing = false;
-        //         gameObject.tag = "Player";
-        //         // if (animator != null)
-        //         //     animator.SetBool("isDashing", false);
-        //     }
-
-        //     // if (animator != null)
-        //     //     animator.SetFloat("xVelocity", 0f);
-        // }
         if (!isAttacking)
         {
             float horizontalInput = Input.GetAxis("Horizontal");
@@ -126,32 +102,32 @@ public class PlayerController : MonoBehaviour
             inputVector = Vector2.ClampMagnitude(inputVector, 1);
 
             movement = inputVector * movementSpeed;
-
-            // if (animator != null)
-            //     animator.SetFloat("xVelocity", inputVector.magnitude);
-        }
-        else
-        {
-            // if (animator != null)
-            //     animator.SetFloat("xVelocity", 0f);
         }
 
-        Vector2 newPos = currentPos + movement * Time.fixedDeltaTime;
-        rbody.MovePosition(newPos);
+        Vector2 newPosNormal = currentPos + movement * Time.fixedDeltaTime;
+        rbody.MovePosition(newPosNormal);
     }
 
     void Update()
     {
         shootTimer -= Time.deltaTime;
-        //dashCooldownTimer -= Time.deltaTime;
         powerShotTimer -= Time.deltaTime;
 
         UpdateTransformation();
+        if (isTransformed)
+        {
+            float verticalInput = Input.GetAxisRaw("Vertical");
+            // Always move right (x=1), vertical guided by player input
+            rocketMoveDirection = new Vector2(1f, verticalInput);
 
-        // if (!isDashing && dashCooldownTimer <= 0f && controls.Player.Dash.WasPressedThisFrame())
-        // {
-        //     gameObject.tag = "Enemy";
-        // }
+            // Normalize to keep speed consistent
+            rocketMoveDirection = rocketMoveDirection.normalized;
+        }
+        else
+        {
+            // Optional: reset rotation when not transformed
+            transform.rotation = Quaternion.Euler(0f, 0f, -90f);
+        }
 
         // Normal shooting
         if (!isTransformed && controls.Player.Shoot.WasPressedThisFrame() && shootTimer <= 0f)
@@ -176,7 +152,7 @@ public class PlayerController : MonoBehaviour
         {
             TransformPlayer();
         }
-        
+
         if (controls.Player.Shrink.IsPressed())
         {
             StartShrink();
@@ -185,56 +161,20 @@ public class PlayerController : MonoBehaviour
         {
             StopShrink();
         }
-
-
     }
 
     private void FirePowerShot()
     {
-        // Stop normal gun
         gun.StopShooting();
 
-        // Fire from power gun
         if (powerGun != null)
         {
             Vector2 shootDir = transform.up;
             powerGun.Shoot(shootDir);
         }
 
-        // Reset cooldown
         powerShotTimer = powerShotCooldown;
     }
-
-    // private void RotateTowardsTaggedTarget(string targetTag)
-    // {
-    //     GameObject[] targets = GameObject.FindGameObjectsWithTag("Enemy");
-    //     if (targets.Length == 0) return;
-
-    //     GameObject closestTarget = null;
-    //     float closestDistanceSqr = Mathf.Infinity;
-    //     Vector3 currentPosition = -transform.position;
-
-    //     foreach (GameObject target in targets)
-    //     {
-    //         Vector3 directionToTarget = target.transform.position - currentPosition;
-    //         float dSqrToTarget = directionToTarget.sqrMagnitude;
-    //         if (dSqrToTarget < closestDistanceSqr)
-    //         {
-    //             closestDistanceSqr = dSqrToTarget;
-    //             closestTarget = target;
-    //         }
-    //     }
-
-    //     if (closestTarget != null)
-    //     {
-    //         Vector3 direction = closestTarget.transform.position - transform.position;
-    //         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-    //         transform.rotation = Quaternion.Euler(0f, 0f, angle);
-    //         transform.rotation = Quaternion.Euler(0f, 0f, angle + 90f);
-    //         transform.rotation = Quaternion.Euler(0f, 0f, angle - 90f);
-    //     }
-    // }
-
 
     public void TransformPlayer()
     {
@@ -245,20 +185,25 @@ public class PlayerController : MonoBehaviour
         if (powerGun != null) powerGun.StopShooting();
         originalMovementSpeed = movementSpeed;
         originalScale = normalScale;
-        movementSpeed = originalMovementSpeed* 0.5f; // half speed
-        transform.localScale = originalScale * 5.5f;  //change 5.5f if needed (this increases size of player object)
+
+        movementSpeed = 0f; // Disable player movement while rocket
+        transform.localScale = originalScale * 5.5f;  // Scale up for rocket
         transformationTimer = transformationDuration;
 
-        isTransformed = true;
-        canShoot = false; // disable shooting
+        canShoot = false;
 
         // Change sprite
         SpriteRenderer sr = GetComponent<SpriteRenderer>();
         if (sr != null && transformedSprite != null)
             sr.sprite = transformedSprite;
-            UpdateColliderToMatchSprite();
+        UpdateColliderToMatchSprite();
 
+        // Initialize rocket direction with last aiming direction or default
+        rocketMoveDirection = Vector2.right;
 
+        // Rotate rocket to face initial direction
+        float angle = Mathf.Atan2(rocketMoveDirection.y, rocketMoveDirection.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(0f, 0f, angle - 90f);
     }
 
     private void RevertTransformation()
@@ -266,14 +211,16 @@ public class PlayerController : MonoBehaviour
         isTransformed = false;
         movementSpeed = originalMovementSpeed;
         transform.localScale = normalScale;
-        isTransformed = false;
         canShoot = true;
+
+        // Reset rotation
+        transform.rotation = Quaternion.identity;
 
         // Revert sprite
         SpriteRenderer sr = GetComponent<SpriteRenderer>();
         if (sr != null && normalSprite != null)
             sr.sprite = normalSprite;
-            UpdateColliderToMatchSprite();
+        UpdateColliderToMatchSprite();
     }
 
     private void UpdateTransformation()
@@ -318,9 +265,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
-
-
     private void StopShrink()
     {
         if (!isShrunk) return;
@@ -340,12 +284,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
-
-
-
-
-
     void UpdateColliderToMatchSprite()
     {
         var sr = GetComponent<SpriteRenderer>();
@@ -363,11 +301,7 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-
-
-
-
-
 }
+
 
 
