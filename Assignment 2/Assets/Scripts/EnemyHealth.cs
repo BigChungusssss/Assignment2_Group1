@@ -18,10 +18,10 @@ public class EnemyHealth : MonoBehaviour
         currentHealth = maxHealth;
     }
 
-    void Update()
-    {
-        Debug.Log(CurrentHealth);
-    }
+    // void Update()
+    // {
+    //     Debug.Log(CurrentHealth);
+    // }
 
     public void TakeDamage(int amount)
     {
