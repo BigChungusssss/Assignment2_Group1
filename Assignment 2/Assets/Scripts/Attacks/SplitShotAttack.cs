@@ -10,11 +10,13 @@ public class SplitShotAttack : AttackBase
     [SerializeField]
     float slowSpeed = 1.5f;
     [SerializeField] 
-    float lifetime = 5f;
+    float lifetime = 0.5f;
 
     //split
     [SerializeField]
     GameObject smallBullet;
+    [SerializeField]
+    GameObject smallBulletParry;
     [SerializeField] 
     float timeBeforeSplit = 1f;
     [SerializeField] 
@@ -50,6 +52,9 @@ public class SplitShotAttack : AttackBase
 
         float elapsed = 0f;
         float initialSpeed = speed;
+        int num1 = Random.Range(1, 6);
+        int num2 = Random.Range(1, 6);
+        int num3 = Random.Range(1, 6);
 
         while (elapsed < timeBeforeSplit)
         {
@@ -61,9 +66,30 @@ public class SplitShotAttack : AttackBase
         yield return new WaitForSeconds(0.01f);
 
         //Spawn 3 bullets
-        SpawnSplitBullet(180f);    
-        SpawnSplitBullet(155f);   
-        SpawnSplitBullet(205f); 
+        if (num1 == 4)
+        {
+            SpawnParryBullet(180f);
+        }
+        else
+        {
+            SpawnSplitBullet(180f);
+        }
+        if (num2 == 4)
+        {
+            SpawnParryBullet(155f);
+        }
+        else
+        {
+            SpawnSplitBullet(155f);
+        }
+        if (num3 == 4)
+        {
+            SpawnParryBullet(205f);
+        }
+        else
+        {
+            SpawnSplitBullet(205f);
+        }
 
         //Destroy the main bullet
         Destroy(gameObject);
@@ -86,6 +112,22 @@ public class SplitShotAttack : AttackBase
         {
             rbBullet.velocity = direction.normalized * 10f;
         }
+        Destroy (bullet, lifetime);
+    }
+
+    private void SpawnParryBullet(float angleDegrees)
+    {
+        Vector2 direction = Quaternion.Euler(0, 0, angleDegrees) * Vector2.right;
+
+        GameObject parryBullet = Instantiate(smallBulletParry, transform.position, Quaternion.Euler(0f, 0f, angleDegrees));
+
+        Rigidbody2D rbBullet = parryBullet.GetComponent<Rigidbody2D>();
+        if (rbBullet != null)
+        {
+            rbBullet.velocity = direction.normalized * 10f;
+        }
+
+        Destroy(parryBullet, lifetime);
     }
 
     

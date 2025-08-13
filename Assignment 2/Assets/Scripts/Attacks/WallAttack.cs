@@ -28,9 +28,8 @@ public class WallAttack : AttackBase
 
     private IEnumerator BulletSequence()
     {
+        yield return new WaitForSeconds(0.6f);
         rb.velocity = Vector2.left * speed;
-
-        yield return new WaitForSeconds(0.01f);
 
     }
 

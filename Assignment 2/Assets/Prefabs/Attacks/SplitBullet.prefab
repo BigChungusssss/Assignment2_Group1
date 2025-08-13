@@ -166,7 +166,8 @@ MonoBehaviour:
   parryable: 0
   speed: 10
   slowSpeed: 0.5
-  lifetime: 7
+  lifetime: 2
   smallBullet: {fileID: 3665263810696704340, guid: ebead70cc38d4b24789dc57e439daa20, type: 3}
+  smallBulletParry: {fileID: 3702894903507581139, guid: 69cc9adda38733e41b1eebedc2f8ef05, type: 3}
   timeBeforeSplit: 1
   isMainBullet: 1
