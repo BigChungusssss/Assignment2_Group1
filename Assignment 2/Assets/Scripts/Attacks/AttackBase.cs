@@ -6,11 +6,11 @@ public abstract class AttackBase : MonoBehaviour
 {
     //public Sprite bulletSprite;
     [SerializeField]
-    int hp;
+    public int hp;
     [SerializeField]
-    float cooldown;
+    public float cooldown;
     [SerializeField]
-    bool parryable;
+    public bool parryable;
 
     protected abstract void StartAttack();
 
