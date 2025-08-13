@@ -200,10 +200,18 @@ MonoBehaviour:
   phases:
   - phaseName: introduction
     attacks:
-    - attackPrefab: {fileID: 7681251940958032946, guid: cdc578c0104670c4d9ea8c2177046930, type: 3}
-      interval: 5
+    - attackPrefab: {fileID: 8812391960080595029, guid: 06bc67c03ef844547881c7aa9b37fb6c, type: 3}
+      interval: 27
       pauseBossOnSpawn: 1
       bossPauseDuration: 1
+      attackAnimationTrigger: 
+      animationWindUp: 0.3
+    - attackPrefab: {fileID: 7681251940958032946, guid: cdc578c0104670c4d9ea8c2177046930, type: 3}
+      interval: 7
+      pauseBossOnSpawn: 1
+      bossPauseDuration: 1
+      attackAnimationTrigger: 
+      animationWindUp: 0.3
     spawnPoints:
     - {fileID: 697599803}
     - {fileID: 1295645953}
@@ -645,7 +653,7 @@ GameObject:
   - component: {fileID: 1155176336}
   m_Layer: 0
   m_Name: MainCharacter
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
