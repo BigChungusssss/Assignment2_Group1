@@ -3,17 +3,26 @@ using System.Collections;
 
 public class BossVerticalFigureEight : MonoBehaviour
 {
-    public float radius = 2f;
-    public float speed = 1f;          // radians per second
-    public float pauseTime = 1f;
-    public float verticalStretch = 1f; // controls vertical elongation
+    [Header("Movement Settings")]
+    public float radius = 2f;            // size of movement
+    public float speed = 1f;             // radians per second
+    public float pauseTime = 1f;         // pause at top/bottom points
+    public float verticalStretch = 1f;   // controls vertical elongation
+    public float resumeSmoothTime = 0.01f; // seconds to ease in
 
     private Vector2 centerPos;
+    private Coroutine movementRoutine;
+
+    [HideInInspector]
+    public bool isMovementPaused = false;
+
+    private bool wasPausedLastFrame = false; // track transitions
+    private float speedMultiplier = 1f;      // easing control
 
     void Start()
     {
         centerPos = transform.position;
-        StartCoroutine(FigureEightRoutine());
+        movementRoutine = StartCoroutine(FigureEightRoutine());
     }
 
     IEnumerator FigureEightRoutine()
@@ -26,7 +35,7 @@ public class BossVerticalFigureEight : MonoBehaviour
         {
             while (t < Mathf.PI * 2f)
             {
-                // Pause at start of top ring (t=0)
+                // Pause at top (t = 0)
                 if (!pausedAtTop && Mathf.Abs(t - 0f) < 0.01f)
                 {
                     pausedAtTop = true;
@@ -34,11 +43,10 @@ public class BossVerticalFigureEight : MonoBehaviour
                 }
                 else if (pausedAtTop && Mathf.Abs(t - 0f) > 0.05f)
                 {
-                    // Reset flag after passing the pause range
                     pausedAtTop = false;
                 }
 
-                // Pause at start of bottom ring (t=π)
+                // Pause at bottom (t = π)
                 if (!pausedAtBottom && Mathf.Abs(t - Mathf.PI) < 0.01f)
                 {
                     pausedAtBottom = true;
@@ -48,17 +56,57 @@ public class BossVerticalFigureEight : MonoBehaviour
                 {
                     pausedAtBottom = false;
                 }
+
+                // If paused externally
+                if (isMovementPaused)
+                {
+                    wasPausedLastFrame = true;
+                    yield return null;
+                    continue;
+                }
+
+                // Smooth resume after unpause
+                if (wasPausedLastFrame)
+                {
+                    yield return StartCoroutine(SmoothResume());
+                    wasPausedLastFrame = false;
+                }
+
+                // Movement
                 float x = Mathf.Sin(2 * t) / verticalStretch * radius;
                 float y = Mathf.Sin(t) * radius;
                 transform.position = centerPos + new Vector2(x, y);
 
-
-
-                t += Time.deltaTime * speed;
+                t += Time.deltaTime * speed * speedMultiplier;
                 yield return null;
             }
 
-            t -= Mathf.PI * 2f;
+            t -= Mathf.PI * 2f; // Loop
         }
+    }
+
+    IEnumerator SmoothResume()
+    {
+        float elapsed = 0f;
+        speedMultiplier = 0f;
+
+        while (elapsed < resumeSmoothTime)
+        {
+            elapsed += Time.deltaTime;
+            speedMultiplier = Mathf.SmoothStep(0f, 1f, elapsed / resumeSmoothTime);
+            yield return null;
+        }
+
+        speedMultiplier = 1f;
+    }
+
+    public void StopMovement()
+    {
+        isMovementPaused = true;
+    }
+
+    public void ResumeMovement()
+    {
+        isMovementPaused = false;
     }
 }
