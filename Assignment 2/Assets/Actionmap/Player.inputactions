@@ -60,7 +60,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "parry",
+                    "name": "Parry",
                     "type": "Button",
                     "id": "2dd329c9-cce5-4073-a5c8-b73660fd1217",
                     "expectedControlType": "Button",
@@ -187,7 +187,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "parry",
+                    "action": "Parry",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

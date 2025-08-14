@@ -60,6 +60,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SplitBullet Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 3527395051709181868, guid: 446aa47a245f9004082ae7aa1cd3b131, type: 3}
+      propertyPath: m_TagString
+      value: IndestructibleEnemy
+      objectReference: {fileID: 0}
     - target: {fileID: 4006516061382662045, guid: 446aa47a245f9004082ae7aa1cd3b131, type: 3}
       propertyPath: smallBullet
       value: 
