@@ -1,44 +1,26 @@
 using UnityEngine;
 
-public class EnemyHealth : MonoBehaviour
+public class EnemyHealth : MonoBehaviour, IDamageable
 {
-    [Header("Health Settings")]
-    public int maxHealth = 100;
-    private int currentHealth;
+    public float maxHealth = 100f;
+    public float currentHealth;
 
-    
-    public int CurrentHealth => currentHealth;
+    void Awake() => currentHealth = maxHealth;
 
- 
-    public delegate void EnemyDied(EnemyHealth enemy);
-    public event EnemyDied OnEnemyDied;
-
-    void Awake()
+    public void TakeDamage(float amount)
     {
-        currentHealth = maxHealth;
+        currentHealth -= amount;
+        if (currentHealth <= 0) Die();
     }
 
-    // void Update()
-    // {
-    //     Debug.Log(CurrentHealth);
-    // }
-
-    public void TakeDamage(int amount)
+    void Update()
     {
-        if (amount <= 0) return;
-
-        currentHealth -= amount;
-        currentHealth = Mathf.Max(currentHealth, 0);
-
-        if (currentHealth == 0)
-        {
-            Die();
-        }
+        Debug.Log(currentHealth);
     }
 
     private void Die()
     {
-        OnEnemyDied?.Invoke(this);
         Destroy(gameObject);
     }
 }
+

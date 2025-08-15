@@ -179,11 +179,11 @@ Transform:
   m_GameObject: {fileID: 195806744}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -4.121891, y: 0.54412156, z: -0.07069923}
-  m_LocalScale: {x: 0.69180214, y: 0.21326703, z: 0.69180214}
+  m_LocalPosition: {x: 0.48180676, y: 2.6413627, z: 9.897804}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1845215413}
+  m_Father: {fileID: 519420032}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &195806746
 MonoBehaviour:
@@ -197,28 +197,82 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cead51fa52afda44db0136a42b88f1d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attacks:
+  - attackPrefab: {fileID: 3527395051709181868, guid: 446aa47a245f9004082ae7aa1cd3b131, type: 3}
+    interval: 7
+    pauseBossOnSpawn: 1
+    bossPauseDuration: 0
+    attackAnimationTrigger: 
+    animationWindUp: 0
+  - attackPrefab: {fileID: 3351603412258444327, guid: d1f2e2f90970a5b41953d8148e7c299d, type: 3}
+    interval: 27
+    pauseBossOnSpawn: 0
+    bossPauseDuration: 0
+    attackAnimationTrigger: 
+    animationWindUp: 0
+  spawnPoints:
+  - {fileID: 2027517926}
+  - {fileID: 1295645953}
+  - {fileID: 697599803}
+  boss: {fileID: 1845215410}
+--- !u!1 &262230696
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 262230698}
+  - component: {fileID: 262230697}
+  m_Layer: 0
+  m_Name: PhaseManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &262230697
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 262230696}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 320d1158ffd96c04abb2b99f8771fd9a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   phases:
-  - phaseName: introduction
-    attacks:
-    - attackPrefab: {fileID: 3351603412258444327, guid: d1f2e2f90970a5b41953d8148e7c299d, type: 3}
-      interval: 27
-      pauseBossOnSpawn: 1
-      bossPauseDuration: 1
-      attackAnimationTrigger: 
-      animationWindUp: 0.3
-    - attackPrefab: {fileID: 7681251940958032946, guid: cdc578c0104670c4d9ea8c2177046930, type: 3}
-      interval: 7
-      pauseBossOnSpawn: 1
-      bossPauseDuration: 1
-      attackAnimationTrigger: 
-      animationWindUp: 0.3
-    spawnPoints:
-    - {fileID: 697599803}
-    - {fileID: 1295645953}
-    - {fileID: 2027517926}
-    bossHealthThreshold: 0
+  - phaseName: Introduction
     boss: {fileID: 1845215410}
-    phaseTransitionDelay: 0
+    spawners:
+    - {fileID: 195806744}
+    - {fileID: 326600932}
+  - phaseName: Finale
+    boss: {fileID: 0}
+    spawners:
+    - {fileID: 0}
+    - {fileID: 0}
+  playerController: {fileID: 1155176335}
+  prePhaseDelay: 5
+  transitionDelay: 5
+--- !u!4 &262230698
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 262230696}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -4.8114414, y: 1.1752436, z: -0.023329344}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &326600932
 GameObject:
   m_ObjectHideFlags: 0
@@ -263,27 +317,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 425b0ca98b7ad95448a5479d3b05f89f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  phases:
-  - phaseName: Introduction
-    enemies:
-    - enemyPrefab: {fileID: 216525468301582012, guid: d66788066514dd24dae59185504ed12b, type: 3}
-      interval: 5
-    spawnPoints:
-    - {fileID: 94536692}
-    - {fileID: 1006739823}
-    bossHealthThreshold: 0.5
-    boss: {fileID: 1845215410}
-    phaseTransitionDelay: 1
-  - phaseName: Finale
-    enemies:
-    - enemyPrefab: {fileID: 1066622297007488070, guid: 98d9b6b8fb17ef64496cb20412e73481, type: 3}
-      interval: 5
-    spawnPoints:
-    - {fileID: 94536692}
-    - {fileID: 1006739823}
-    bossHealthThreshold: 0.5
-    boss: {fileID: 1845215410}
-    phaseTransitionDelay: 10
+  enemies:
+  - enemyPrefab: {fileID: 5387832982939315626, guid: 5caba1eebbaa37245872271405d39328, type: 3}
+    interval: 5
+  spawnPoints:
+  - {fileID: 94536692}
+  - {fileID: 1006739823}
+  boss: {fileID: 1845215410}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -424,6 +464,7 @@ Transform:
   - {fileID: 1845215413}
   - {fileID: 1006739823}
   - {fileID: 94536692}
+  - {fileID: 195806745}
   - {fileID: 326600934}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -653,6 +694,7 @@ GameObject:
   - component: {fileID: 1155176336}
   - component: {fileID: 1155176338}
   - component: {fileID: 1155176339}
+  - component: {fileID: 1155176340}
   m_Layer: 0
   m_Name: MainCharacter
   m_TagString: Player
@@ -785,7 +827,7 @@ MonoBehaviour:
   shrinkScaleMultiplier: 0.6
   shrinkSprite: {fileID: 0}
   isShrunk: 0
-  currentCards: 0
+  currentCards: 4
   maxCards: 4
   parryWindow: 1
   isParryActive: 0
@@ -888,6 +930,21 @@ MonoBehaviour:
   enemyDamage: 1
   parryableDamage: 2
   invincibilityTime: 2
+--- !u!114 &1155176340
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1155176331}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 859378e500fe792428fe136125fd7ecf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerHealth: {fileID: 1155176339}
+  mainCamera: {fileID: 519420031}
+  respawnPoint: {fileID: 1772418723}
 --- !u!1 &1295645952
 GameObject:
   m_ObjectHideFlags: 0
@@ -950,6 +1007,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1155176333}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
+--- !u!1 &1772418722
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1772418723}
+  m_Layer: 0
+  m_Name: Respawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1772418723
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1772418722}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -4, y: -0.03, z: -0.023329344}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1845215410
 GameObject:
   m_ObjectHideFlags: 0
@@ -1038,7 +1126,6 @@ Transform:
   - {fileID: 697599803}
   - {fileID: 1295645953}
   - {fileID: 2027517926}
-  - {fileID: 195806745}
   m_Father: {fileID: 519420032}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1845215414
@@ -1137,6 +1224,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 1000
+  currentHealth: 0
 --- !u!1 &1984906818
 GameObject:
   m_ObjectHideFlags: 0
@@ -1239,3 +1327,5 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 519420032}
+  - {fileID: 262230698}
+  - {fileID: 1772418723}

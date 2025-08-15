@@ -173,7 +173,14 @@ public class PlayerController : MonoBehaviour
             gun.StopShooting();
         }
 
-        // REMOVE: direct power shot & rocket transform input from here
+        if (controls.Player.PowerShot.WasPressedThisFrame() &&!isTransformed && !isShrunk)
+        {
+           FirePowerShot();
+        }
+
+
+
+ 
         // (Handled in PlayerCardManager)
 
         if (controls.Player.Shrink.IsPressed())
@@ -199,7 +206,7 @@ public class PlayerController : MonoBehaviour
 
     public void FirePowerShot()
     {
-        if (currentCards <= 0) return; // Not enough cards
+        // if (currentCards <= 0) return; // Not enough cards
 
         gun.StopShooting();
 
@@ -209,7 +216,7 @@ public class PlayerController : MonoBehaviour
             powerGun.Shoot(shootDir);
         }
 
-        currentCards--; // Consume a card
+        // currentCards--; // Consume a card
         powerShotTimer = powerShotCooldown;
     }
 
