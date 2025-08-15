@@ -1,44 +1,58 @@
 using UnityEngine;
 
-public class EnemyHealth : MonoBehaviour
+public class EnemyHealth : MonoBehaviour, IDamageable
 {
-    [Header("Health Settings")]
-    public int maxHealth = 100;
-    private int currentHealth;
+    public float maxHealth = 100f;
+    public float currentHealth;
 
-    
-    public int CurrentHealth => currentHealth;
-
- 
-    public delegate void EnemyDied(EnemyHealth enemy);
-    public event EnemyDied OnEnemyDied;
+    private bool isDead = false;
+    private Rigidbody2D rb;
+    private BossVerticalFigureEight movementScript; // Replace with your movement script class
 
     void Awake()
     {
         currentHealth = maxHealth;
+
+        // Cache references
+        rb = GetComponent<Rigidbody2D>();
+        movementScript = GetComponent<BossVerticalFigureEight>();
     }
 
-    // void Update()
-    // {
-    //     Debug.Log(CurrentHealth);
-    // }
-
-    public void TakeDamage(int amount)
+    public void TakeDamage(float amount)
     {
-        if (amount <= 0) return;
+        if (isDead) return;
 
         currentHealth -= amount;
-        currentHealth = Mathf.Max(currentHealth, 0);
 
-        if (currentHealth == 0)
+        if (currentHealth <= 0)
         {
             Die();
         }
     }
 
+    void Update()
+    {
+        // Optional: debug current health
+        Debug.Log(currentHealth);
+    }
+
     private void Die()
     {
-        OnEnemyDied?.Invoke(this);
-        Destroy(gameObject);
+        isDead = true;
+
+        // Stop Rigidbody movement
+        if (rb != null)
+        {
+            rb.velocity = Vector2.zero;
+            rb.angularVelocity = 0f;
+        }
+
+        // Disable movement script if exists
+        if (movementScript != null)
+            movementScript.enabled = false;
+
+        // Optional: play death animation, particle effect, etc.
+        Debug.Log(gameObject.name + " has died but is still in scene.");
     }
 }
+

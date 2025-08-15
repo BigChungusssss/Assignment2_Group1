@@ -42,7 +42,7 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
-    private void TakeDamage(float amount)
+    public void TakeDamage(float amount)
     {
         if (stats == null) return;
 

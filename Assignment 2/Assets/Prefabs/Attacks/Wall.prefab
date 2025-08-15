@@ -99,11 +99,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c17dc1b3db25f44995379acf57906af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hp: 100
+  hp: 1
   cooldown: 2
   parryable: 0
   lifetime: 3
   speed: 5
+  maxHealth: 1
+  currentHealth: 0
 --- !u!50 &1539629471617972985
 Rigidbody2D:
   serializedVersion: 4
