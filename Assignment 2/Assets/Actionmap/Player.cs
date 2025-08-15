@@ -82,7 +82,7 @@ public partial class @Control: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""parry"",
+                    ""name"": ""Parry"",
                     ""type"": ""Button"",
                     ""id"": ""2dd329c9-cce5-4073-a5c8-b73660fd1217"",
                     ""expectedControlType"": ""Button"",
@@ -96,6 +96,17 @@ public partial class @Control: IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""fea1b16d-4d35-49d7-8567-374fa32e29f5"",
                     ""path"": ""<XInputController>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Shoot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fd466e4a-21d3-468b-91ae-17d195038d73"",
+                    ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -138,8 +149,30 @@ public partial class @Control: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""0e4ec467-9219-47c1-91b7-1bd3c2a3efb1"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PowerShot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""2bd65eac-f2b3-4a7b-bb1f-4dff5d979af5"",
                     ""path"": ""<XInputController>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RocketTransform"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""546c74d1-2b23-4209-b80c-2367dfa03b7d"",
+                    ""path"": ""<Mouse>/rightButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -160,12 +193,23 @@ public partial class @Control: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""5274af9f-46a6-49c5-af1a-49134f0feccd"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Shrink"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""3260f4a7-0b81-4b4b-8e9c-5baf293fc3ec"",
                     ""path"": ""<XInputController>/buttonEast"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""parry"",
+                    ""action"": ""Parry"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -182,7 +226,7 @@ public partial class @Control: IInputActionCollection2, IDisposable
         m_Player_PowerShot = m_Player.FindAction("PowerShot", throwIfNotFound: true);
         m_Player_RocketTransform = m_Player.FindAction("RocketTransform", throwIfNotFound: true);
         m_Player_Shrink = m_Player.FindAction("Shrink", throwIfNotFound: true);
-        m_Player_parry = m_Player.FindAction("parry", throwIfNotFound: true);
+        m_Player_Parry = m_Player.FindAction("Parry", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -250,7 +294,7 @@ public partial class @Control: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_PowerShot;
     private readonly InputAction m_Player_RocketTransform;
     private readonly InputAction m_Player_Shrink;
-    private readonly InputAction m_Player_parry;
+    private readonly InputAction m_Player_Parry;
     public struct PlayerActions
     {
         private @Control m_Wrapper;
@@ -261,7 +305,7 @@ public partial class @Control: IInputActionCollection2, IDisposable
         public InputAction @PowerShot => m_Wrapper.m_Player_PowerShot;
         public InputAction @RocketTransform => m_Wrapper.m_Player_RocketTransform;
         public InputAction @Shrink => m_Wrapper.m_Player_Shrink;
-        public InputAction @parry => m_Wrapper.m_Player_parry;
+        public InputAction @Parry => m_Wrapper.m_Player_Parry;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -289,9 +333,9 @@ public partial class @Control: IInputActionCollection2, IDisposable
             @Shrink.started += instance.OnShrink;
             @Shrink.performed += instance.OnShrink;
             @Shrink.canceled += instance.OnShrink;
-            @parry.started += instance.OnParry;
-            @parry.performed += instance.OnParry;
-            @parry.canceled += instance.OnParry;
+            @Parry.started += instance.OnParry;
+            @Parry.performed += instance.OnParry;
+            @Parry.canceled += instance.OnParry;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -314,9 +358,9 @@ public partial class @Control: IInputActionCollection2, IDisposable
             @Shrink.started -= instance.OnShrink;
             @Shrink.performed -= instance.OnShrink;
             @Shrink.canceled -= instance.OnShrink;
-            @parry.started -= instance.OnParry;
-            @parry.performed -= instance.OnParry;
-            @parry.canceled -= instance.OnParry;
+            @Parry.started -= instance.OnParry;
+            @Parry.performed -= instance.OnParry;
+            @Parry.canceled -= instance.OnParry;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)

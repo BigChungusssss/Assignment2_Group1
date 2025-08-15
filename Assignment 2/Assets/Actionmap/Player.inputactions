@@ -60,7 +60,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "parry",
+                    "name": "Parry",
                     "type": "Button",
                     "id": "2dd329c9-cce5-4073-a5c8-b73660fd1217",
                     "expectedControlType": "Button",
@@ -74,6 +74,17 @@
                     "name": "",
                     "id": "fea1b16d-4d35-49d7-8567-374fa32e29f5",
                     "path": "<XInputController>/rightTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Shoot",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fd466e4a-21d3-468b-91ae-17d195038d73",
+                    "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -116,8 +127,30 @@
                 },
                 {
                     "name": "",
+                    "id": "0e4ec467-9219-47c1-91b7-1bd3c2a3efb1",
+                    "path": "<Keyboard>/enter",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PowerShot",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "2bd65eac-f2b3-4a7b-bb1f-4dff5d979af5",
                     "path": "<XInputController>/rightShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RocketTransform",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "546c74d1-2b23-4209-b80c-2367dfa03b7d",
+                    "path": "<Mouse>/rightButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -138,12 +171,23 @@
                 },
                 {
                     "name": "",
+                    "id": "5274af9f-46a6-49c5-af1a-49134f0feccd",
+                    "path": "<Keyboard>/shift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Shrink",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "3260f4a7-0b81-4b4b-8e9c-5baf293fc3ec",
                     "path": "<XInputController>/buttonEast",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "parry",
+                    "action": "Parry",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
