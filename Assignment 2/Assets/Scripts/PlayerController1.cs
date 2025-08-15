@@ -160,6 +160,8 @@ public class PlayerController : MonoBehaviour
             transform.rotation = Quaternion.Euler(0f, 0f, -90f);
         }
 
+        
+
         // Normal shooting (still handled here)
         if (!isTransformed && !isShrunk && controls.Player.Shoot.WasPressedThisFrame() && shootTimer <= 0f)
         {
