@@ -91,7 +91,7 @@ public class PhaseManager2 : MonoBehaviour
             {
                 playerHealth.EnableInvincibility();
                 StartCoroutine(TransitionToNextPhase());
-                playerHealth.DisableInvincibility();
+
                 
 
             }
@@ -108,12 +108,15 @@ public class PhaseManager2 : MonoBehaviour
             playerGun.StopShooting();
         if (playerController != null)
             playerController.enabled = false;
+        
 
         // Fade-out black screen
         if (blackScreenAnimator != null)
             blackScreenAnimator.SetTrigger("Start");
 
+
         yield return new WaitForSeconds(blackScreenDuration);
+
 
         // Disable current boss and spawners
         if (currentPhase.boss != null)
@@ -128,11 +131,12 @@ public class PhaseManager2 : MonoBehaviour
             }
         }
 
- 
+
         yield return new WaitForSeconds(transitionDelay);
 
         // Start next phase
         StartCoroutine(StartNextPhaseWithFade());
+        
     }
 
     private IEnumerator StartNextPhaseWithFade()
@@ -163,13 +167,18 @@ public class PhaseManager2 : MonoBehaviour
         if (blackScreenAnimator != null)
             blackScreenAnimator.SetTrigger("End");
 
+
         yield return new WaitForSeconds(blackScreenDuration);
+       
 
         // Enable player after fade-in
         if (playerController != null)
             playerController.enabled = true;
 
+        
+
         phaseActive = true;
+         playerHealth.DisableInvincibility();
         Debug.Log("Phase started: " + nextPhase.phaseName);
     }
 
