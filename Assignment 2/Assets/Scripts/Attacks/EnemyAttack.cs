@@ -31,7 +31,6 @@ public class EnemyAttack : AttackBase
 
     private void Start()
     {
-        currentHealth = maxHealth;
         rb = GetComponent<Rigidbody2D>();
         num = Random.Range(1, 6);
         StartAttack();
@@ -79,16 +78,7 @@ public class EnemyAttack : AttackBase
         Destroy(gameObject);
     }
 
-    public void TakeDamage(int amount)
-    {
-        currentHealth -= amount;
-        currentHealth = Mathf.Max(currentHealth, 0f); // Clamp to 0
 
-        if (currentHealth <= 0f)
-        {
-            Destroy(gameObject);
-        }
-    }
     
 
     

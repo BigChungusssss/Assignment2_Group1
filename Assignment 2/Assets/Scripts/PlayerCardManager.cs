@@ -3,6 +3,7 @@ using UnityEngine;
 public class PlayerCardManager : MonoBehaviour
 {
     private PlayerController player;
+    public GameObject cards;
 
     private void Awake()
     {
@@ -25,6 +26,9 @@ public class PlayerCardManager : MonoBehaviour
             player.currentCards == player.maxCards)
         {
             player.TransformPlayer();
+            cards.SetActive(false);
         }
     }
+
+    
 }

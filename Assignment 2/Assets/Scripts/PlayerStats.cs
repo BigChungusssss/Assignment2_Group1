@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class PlayerStats : MonoBehaviour
 {
@@ -10,7 +11,7 @@ public class PlayerStats : MonoBehaviour
     public Text text;
 
     public GameObject temporaryUIText;   // For level up
-    public GameObject temporaryUIText2;  // For health increase
+    public TextMeshProUGUI healthText;  // For health increase
     public GameObject temporaryUIText3;  // For attack power increase
 
     public Gun currentGun; // Assign this from wherever you equip the gun
@@ -46,6 +47,7 @@ public class PlayerStats : MonoBehaviour
     {
         Debug.Log("Attack Power: " + attackPower);
         Debug.Log("Health Power: " + Health);
+        UpdateHealth();
     }
 
     public void ApplyPowerUp(string type)
@@ -73,7 +75,7 @@ public class PlayerStats : MonoBehaviour
     {
         level++;
         UpdateAttackPower();
-        UpdateHealth();
+        
         UpdateLevelDisplay();
 
         if (temporaryUIText != null)
@@ -102,13 +104,16 @@ public class PlayerStats : MonoBehaviour
 
     public void UpdateHealth()
     {
-        Health += 10;
+        // Ensure Health doesn't go below 0
+        Health = Mathf.Max(Health, 0f);
 
-        if (temporaryUIText2 != null)
-        {
-            StartCoroutine(ShowTemporaryText(temporaryUIText2));
-        }
+        // Update the TextMeshProUGUI display
+        if (healthText != null)
+            healthText.text = "HP:"+ Mathf.CeilToInt(Health); // Show as integer
     }
+
+
+
     
     
 }
