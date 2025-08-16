@@ -16,8 +16,8 @@ public class PlayerController : MonoBehaviour
     public float shootCooldown = 0.5f;
 
     [Header("Power Shot")]
-    public Gun powerGun;                        
-    public float powerShotCooldown = 180f;      
+    public Gun powerGun;
+    public float powerShotCooldown = 180f;
     private float powerShotTimer = 0f;
 
     private Vector2 lastAimDirection = Vector2.right;
@@ -54,9 +54,9 @@ public class PlayerController : MonoBehaviour
     private Vector3 originalScale;
 
     [Header("Shrink Mode")]
-    public float shrinkSpeedMultiplier = 1.3f;   
-    public float shrinkScaleMultiplier = 0.6f;   
-    public Sprite shrinkSprite;                  
+    public float shrinkSpeedMultiplier = 1.3f;
+    public float shrinkScaleMultiplier = 0.6f;
+    public Sprite shrinkSprite;
     public bool isShrunk = false;
     private float normalSpeed;
     private Vector3 normalScale;
@@ -67,9 +67,12 @@ public class PlayerController : MonoBehaviour
     [Header("Card System")]
     public int currentCards = 0;
     public int maxCards = 4;
+    [Header("Card UI")]
+    public GameObject[] cardImages;  // Assign your card images in the inspector
+
 
     [Header("Parry Settings")]
-    public float parryWindow = 0.2f; 
+    public float parryWindow = 0.2f;
     public bool isParryActive = false;
     private float parryTimer = 0f;
 
@@ -79,7 +82,7 @@ public class PlayerController : MonoBehaviour
     private bool isDashing = false;
     private Vector2 dashDirection;
     private float dashTime;
-    private float dashDuration = 0.15f; 
+    private float dashDuration = 0.15f;
 
     [Header("Parry Shield")]
     public GameObject parryShield; // --- NEW ---
@@ -191,11 +194,11 @@ public class PlayerController : MonoBehaviour
     public void TransformPlayer()
     {
         if (isTransformed || currentCards < maxCards) return;
-        
+
 
         isTransformed = true;
         if (rocketShield != null)
-           rocketShield.Activate();
+            rocketShield.Activate();
         gun.StopShooting();
         if (powerGun != null) powerGun.StopShooting();
         originalMovementSpeed = movementSpeed;
@@ -215,7 +218,13 @@ public class PlayerController : MonoBehaviour
         float angle = Mathf.Atan2(rocketMoveDirection.y, rocketMoveDirection.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0f, 0f, angle - 90f);
 
-        currentCards = 0; 
+        currentCards = 0;
+        for (int i = 0; i < cardImages.Length; i++)
+        {
+            if (cardImages[i] != null)
+                cardImages[i].SetActive(false);
+        }
+    
     }
 
     public void RevertTransformation()
@@ -234,7 +243,7 @@ public class PlayerController : MonoBehaviour
             rocketShield.Deactivate();
     }
 
-     public void UpdateTransformation()
+    public void UpdateTransformation()
     {
         if (isTransformed)
         {
@@ -356,11 +365,22 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-    
+
     public void AddCard(int amount = 1)
     {
         currentCards = Mathf.Clamp(currentCards + amount, 0, maxCards);
+        UpdateCardsUI();
     }
+
+    private void UpdateCardsUI()
+    {
+        for (int i = 0; i < cardImages.Length; i++)
+        {
+            if (cardImages[i] != null)
+                cardImages[i].SetActive(i < currentCards);
+        }
+    }
+
 }
 
 

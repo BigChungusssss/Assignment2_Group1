@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class WallAttack : AttackBase, IDamageable
+public class WallAttack : AttackBase
 {
     [SerializeField]
     float lifetime = 5f;
@@ -37,21 +37,10 @@ public class WallAttack : AttackBase, IDamageable
 
     }
 
-    public void TakeDamage(float amount)
-    {
-        currentHealth -= amount;
-        if (currentHealth <= 0) Destroy(gameObject);
-    }
-    
-    // public void TakeDamage(int amount)
+    // public void TakeDamage(float amount)
     // {
     //     currentHealth -= amount;
-    //     currentHealth = Mathf.Max(currentHealth, 0f); // Clamp to 0
-
-    //     if (currentHealth <= 0f)
-    //     {
-    //         Destroy(gameObject);
-    //     }
+    //     if (currentHealth <= 0) Destroy(gameObject);
     // }
 
 }

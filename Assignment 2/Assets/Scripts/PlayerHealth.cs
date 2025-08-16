@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
 {
-    public PlayerStats stats;   
+    public PlayerStats stats;
+    public GameOverManager gameOver;  
     public float enemyDamage = 50f; 
     public float parryableDamage = 30f;
 
@@ -92,6 +93,6 @@ public class PlayerHealth : MonoBehaviour
     {
         Debug.Log("Player has died!");
         gameObject.SetActive(false);
-        Time.timeScale = 0f;
+        gameOver.TriggerGameOver();
     }
 }
