@@ -21,6 +21,8 @@ public class PauseMenuUI : MonoBehaviour
     // Called by Pause button (OnClick)
     public void OnPauseButtonClicked()
     {
+        if (UIManager.GameIsOver) return; // <--- prevent pause
+
         if (pauseMenuPanel) pauseMenuPanel.SetActive(true);
         if (pauseButtonUI) pauseButtonUI.SetActive(false);
 
@@ -32,6 +34,8 @@ public class PauseMenuUI : MonoBehaviour
     // Called by Resume button (OnClick)
     public void OnResumeButtonClicked()
     {
+        if (UIManager.GameIsOver) return; // <--- prevent resume
+
         if (pauseMenuPanel) pauseMenuPanel.SetActive(false);
         if (pauseButtonUI) pauseButtonUI.SetActive(true);
 
