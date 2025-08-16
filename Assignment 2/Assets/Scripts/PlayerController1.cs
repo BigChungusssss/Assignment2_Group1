@@ -7,6 +7,8 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     public static PlayerController instance;
+
+    public PlayerHealth playerHealth;
     public float movementSpeed = 1f;
 
     [Header("Normal Gun")]
@@ -14,8 +16,8 @@ public class PlayerController : MonoBehaviour
     public float shootCooldown = 0.5f;
 
     [Header("Power Shot")]
-    public Gun powerGun;                        // Different gun for the special attack
-    public float powerShotCooldown = 180f;      // 3 minutes
+    public Gun powerGun;                        
+    public float powerShotCooldown = 180f;      
     private float powerShotTimer = 0f;
 
     private Vector2 lastAimDirection = Vector2.right;
@@ -35,29 +37,28 @@ public class PlayerController : MonoBehaviour
     public Transform shootPoint;
     public float projectileSpeed = 10f;
 
-    [Header("Transformation")]
+    [Header("Rocket")]
     public Sprite normalSprite;
     public Sprite transformedSprite;
     public bool isTransformed = false;
     private float transformationTimer = 0f;
     public float transformationDuration = 60f;
     private float originalMovementSpeed;
+    [Header("Rocket Shield")]
+    public RocketShield rocketShield;
+
+
 
     private bool canShoot = true;
 
     private Vector3 originalScale;
 
     [Header("Shrink Mode")]
-    public float shrinkSpeedMultiplier = 1.3f;   // move faster while shrunk
-
-    public float shrinkScaleMultiplier = 0.6f;   // size relative to normal
-
-    public Sprite shrinkSprite;                  // sprite when shrunk
-
+    public float shrinkSpeedMultiplier = 1.3f;   
+    public float shrinkScaleMultiplier = 0.6f;   
+    public Sprite shrinkSprite;                  
     public bool isShrunk = false;
-
     private float normalSpeed;
-
     private Vector3 normalScale;
 
     // New variable for rocket movement direction
@@ -68,23 +69,20 @@ public class PlayerController : MonoBehaviour
     public int maxCards = 4;
 
     [Header("Parry Settings")]
-    public float parryWindow = 0.2f; // Time in seconds parry is active
+    public float parryWindow = 0.2f; 
     public bool isParryActive = false;
     private float parryTimer = 0f;
 
     [Header("Parry Dash")]
     public float parryDashDistance = 3f;
-
     public float parryDashSpeed = 15f;
-
     private bool isDashing = false;
-
     private Vector2 dashDirection;
-
     private float dashTime;
-
     private float dashDuration = 0.15f; 
 
+    [Header("Parry Shield")]
+    public GameObject parryShield; // --- NEW ---
 
     private void Awake()
     {
@@ -93,15 +91,8 @@ public class PlayerController : MonoBehaviour
         normalScale = transform.localScale;
     }
 
-    private void OnEnable()
-    {
-        controls.Enable();
-    }
-
-    private void OnDisable()
-    {
-        controls.Disable();
-    }
+    private void OnEnable() => controls.Enable();
+    private void OnDisable() => controls.Disable();
 
     void FixedUpdate()
     {
@@ -124,7 +115,6 @@ public class PlayerController : MonoBehaviour
             moveVector = inputVector * movementSpeed;
         }
 
-        // Dash overrides normal movement
         if (isDashing)
         {
             moveVector = dashDirection * parryDashSpeed;
@@ -133,21 +123,14 @@ public class PlayerController : MonoBehaviour
                 isDashing = false;
         }
 
-        // Final movement
         Vector2 finalPos = rbody.position + moveVector * Time.fixedDeltaTime;
         rbody.MovePosition(finalPos);
     }
-
-
-
-
-
 
     void Update()
     {
         shootTimer -= Time.deltaTime;
         powerShotTimer -= Time.deltaTime;
-
         UpdateTransformation();
 
         if (isTransformed)
@@ -160,9 +143,6 @@ public class PlayerController : MonoBehaviour
             transform.rotation = Quaternion.Euler(0f, 0f, -90f);
         }
 
-        
-
-        // Normal shooting (still handled here)
         if (!isTransformed && !isShrunk && controls.Player.Shoot.WasPressedThisFrame() && shootTimer <= 0f)
         {
             Vector2 shootDir = transform.up;
@@ -175,29 +155,18 @@ public class PlayerController : MonoBehaviour
             gun.StopShooting();
         }
 
-        if (controls.Player.PowerShot.WasPressedThisFrame() &&!isTransformed && !isShrunk)
+        if (controls.Player.PowerShot.WasPressedThisFrame() && !isTransformed && !isShrunk)
         {
-           FirePowerShot();
+            FirePowerShot();
         }
-
-
-
- 
-        // (Handled in PlayerCardManager)
 
         if (controls.Player.Shrink.IsPressed())
-        {
             StartShrink();
-        }
         else
-        {
             StopShrink();
-        }
 
         if (controls.Player.Parry.WasPressedThisFrame())
-        {
             StartParry();
-        }
 
         if (isParryActive)
         {
@@ -208,8 +177,6 @@ public class PlayerController : MonoBehaviour
 
     public void FirePowerShot()
     {
-        // if (currentCards <= 0) return; // Not enough cards
-
         gun.StopShooting();
 
         if (powerGun != null)
@@ -218,16 +185,17 @@ public class PlayerController : MonoBehaviour
             powerGun.Shoot(shootDir);
         }
 
-        // currentCards--; // Consume a card
         powerShotTimer = powerShotCooldown;
     }
 
-
     public void TransformPlayer()
     {
-        if (isTransformed || currentCards < maxCards) return; // Need full cards
+        if (isTransformed || currentCards < maxCards) return;
+        
 
         isTransformed = true;
+        if (rocketShield != null)
+           rocketShield.Activate();
         gun.StopShooting();
         if (powerGun != null) powerGun.StopShooting();
         originalMovementSpeed = movementSpeed;
@@ -236,7 +204,6 @@ public class PlayerController : MonoBehaviour
         movementSpeed = 0f;
         transform.localScale = originalScale * 5.5f;
         transformationTimer = transformationDuration;
-
         canShoot = false;
 
         SpriteRenderer sr = GetComponent<SpriteRenderer>();
@@ -248,143 +215,32 @@ public class PlayerController : MonoBehaviour
         float angle = Mathf.Atan2(rocketMoveDirection.y, rocketMoveDirection.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0f, 0f, angle - 90f);
 
-        currentCards = 0; // Consume all cards
+        currentCards = 0; 
     }
 
-
-
-
-
-
-
-
-
-
-    private void RevertTransformation()
+    public void RevertTransformation()
     {
         isTransformed = false;
         movementSpeed = originalMovementSpeed;
         transform.localScale = normalScale;
         canShoot = true;
-
-        // Reset rotation
         transform.rotation = Quaternion.identity;
 
-        // Revert sprite
         SpriteRenderer sr = GetComponent<SpriteRenderer>();
         if (sr != null && normalSprite != null)
             sr.sprite = normalSprite;
         UpdateColliderToMatchSprite();
+        if (rocketShield != null)
+            rocketShield.Deactivate();
     }
 
-    private void UpdateTransformation()
+     public void UpdateTransformation()
     {
         if (isTransformed)
         {
             transformationTimer -= Time.deltaTime;
-            if (transformationTimer <= 0f)
-            {
-                RevertTransformation();
-            }
+            if (transformationTimer <= 0f) RevertTransformation();
         }
-    }
-
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (isTransformed && other.CompareTag("Enemy"))
-        {
-            RevertTransformation();
-        }
-
-        if (isParryActive && other.CompareTag("Parry"))
-        {
-            SuccessfulParry(other.gameObject);
-        }
-    }
-
-    private void StartShrink()
-    {
-        if (isShrunk) return;
-
-        isShrunk = true;
-        normalSpeed = movementSpeed;
-        normalScale = transform.localScale;
-
-        movementSpeed *= shrinkSpeedMultiplier;
-
-        // Stop shooting immediately
-        gun.StopShooting();
-        if (powerGun != null) powerGun.StopShooting();
-
-        if (!isTransformed)
-        {
-            transform.localScale = normalScale * shrinkScaleMultiplier;
-
-            SpriteRenderer sr = GetComponent<SpriteRenderer>();
-            if (sr != null && shrinkSprite != null)
-                sr.sprite = shrinkSprite;
-
-            UpdateColliderToMatchSprite();
-        }
-    }
-
-
-
-
-    private void StopShrink()
-    {
-        if (!isShrunk) return;
-
-        isShrunk = false;
-        movementSpeed = normalSpeed;
-
-        if (!isTransformed) // Only revert size/sprite if not transformed
-        {
-            transform.localScale = normalScale;
-
-            SpriteRenderer sr = GetComponent<SpriteRenderer>();
-            if (sr != null && normalSprite != null)
-                sr.sprite = normalSprite;
-
-            UpdateColliderToMatchSprite();
-        }
-    }
-
-    // --- Parry ---
-    private void StartParry()
-    {
-
-        if (isParryActive) return;
-
-
-        isParryActive = true;
-        parryTimer = parryWindow;
-        Debug.Log("Parry ready!");
-
-        Vector2 inputDir = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-        if (inputDir == Vector2.zero) inputDir = Vector2.right; // default forward
-        dashDirection = inputDir.normalized;
-
-        // Start dash
-        isDashing = true;
-        dashTime = dashDuration;
-    
-        // Optional: play parry animation here
-    }
-
-    private void EndParry()
-    {
-        isParryActive = false;
-        Debug.Log("Parry ended");
-    }
-
-    private void SuccessfulParry(GameObject parriedObject)
-    {
-        Debug.Log("Parry success!");
-        Destroy(parriedObject);
-        AddCard(1);
-        // Optional: parry success animation/sound
-        EndParry();
     }
 
     // private void OnTriggerEnter2D(Collider2D other)
@@ -393,14 +249,95 @@ public class PlayerController : MonoBehaviour
     //     {
     //         RevertTransformation();
     //     }
-
-    //     if (isParryActive && other.CompareTag("Parryable"))
-    //     {
-    //         SuccessfulParry(other.gameObject);
-    //     }
     // }
 
+    private void StartShrink()
+    {
+        if (isShrunk) return;
 
+        isShrunk = true;
+        normalSpeed = movementSpeed;
+        normalScale = transform.localScale;
+        movementSpeed *= shrinkSpeedMultiplier;
+
+        gun.StopShooting();
+        if (powerGun != null) powerGun.StopShooting();
+
+        if (!isTransformed)
+        {
+            transform.localScale = normalScale * shrinkScaleMultiplier;
+            SpriteRenderer sr = GetComponent<SpriteRenderer>();
+            if (sr != null && shrinkSprite != null)
+                sr.sprite = shrinkSprite;
+            UpdateColliderToMatchSprite();
+        }
+    }
+
+    private void StopShrink()
+    {
+        if (!isShrunk) return;
+
+        isShrunk = false;
+        movementSpeed = normalSpeed;
+
+        if (!isTransformed)
+        {
+            transform.localScale = normalScale;
+            SpriteRenderer sr = GetComponent<SpriteRenderer>();
+            if (sr != null && normalSprite != null)
+                sr.sprite = normalSprite;
+            UpdateColliderToMatchSprite();
+        }
+    }
+
+    // --- Parry ---
+
+    private void StartParry()
+    {
+        if (isParryActive) return;
+
+        isParryActive = true;
+        parryTimer = parryWindow;
+        Debug.Log("Parry ready!");
+
+        // Activate shield first
+        if (parryShield != null) parryShield.SetActive(true);
+
+        // Then disable player collider for invincibility
+        playerHealth.EnableInvincibility();
+
+        Vector2 inputDir = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        if (inputDir == Vector2.zero) inputDir = Vector2.right;
+        dashDirection = inputDir.normalized;
+
+        isDashing = true;
+        dashTime = dashDuration;
+    }
+
+
+    private void EndParry()
+    {
+        isParryActive = false;
+
+        // Re-enable collider
+        playerHealth.DisableInvincibility();
+
+        // Disable shield
+        if (parryShield != null) parryShield.SetActive(false);
+
+        Debug.Log("Parry ended");
+    }
+
+
+
+
+    public void SuccessfulParry(GameObject parriedObject)
+    {
+        Debug.Log("Parry success!");
+        Destroy(parriedObject);
+        AddCard(1);
+        EndParry();
+    }
 
     void UpdateColliderToMatchSprite()
     {
@@ -424,7 +361,6 @@ public class PlayerController : MonoBehaviour
     {
         currentCards = Mathf.Clamp(currentCards + amount, 0, maxCards);
     }
-
 }
 
 

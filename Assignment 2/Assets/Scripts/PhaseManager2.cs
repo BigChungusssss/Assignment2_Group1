@@ -5,22 +5,23 @@ using UnityEngine;
 public class Phase
 {
     public string phaseName = "Phase";
-    public GameObject boss;                // Boss for this phase
-    public GameObject[] spawners;          // Enemy spawners associated with this phase
+    public GameObject boss;             
+    public GameObject[] spawners;         
 }
 
 public class PhaseManager2 : MonoBehaviour
 {
     [Header("Phase Settings")]
     public Phase[] phases;
-    public MonoBehaviour playerController; // Reference to player controller script
-    public Gun playerGun;                  // Reference to player's gun
-    public Animator blackScreenAnimator;   // Animator for black screen transitions
+    public MonoBehaviour playerController;
+    public PlayerHealth playerHealth;
+    public Gun playerGun;                 
+    public Animator blackScreenAnimator;   
     public float prePhaseDelay = 5f;       // Countdown after fade-in for first phase
-    public float transitionDelay = 1f;     // Extra delay between phases
-    public float blackScreenDuration = 1f; // Duration of fade in/out
+    public float transitionDelay = 1f;     
+    public float blackScreenDuration = 1f; 
 
-    private int currentPhaseIndex = -1;    // -1 = before first phase
+    private int currentPhaseIndex = -1;    
     private bool phaseActive = false;
 
     void Start()
@@ -29,34 +30,32 @@ public class PhaseManager2 : MonoBehaviour
 
         DisableAllSpawners();
 
-        // Stop player and shooting initially
         if (playerController != null)
             playerController.enabled = false;
         if (playerGun != null)
             playerGun.StopShooting();
 
-        // Start first phase pre-sequence
         StartCoroutine(PrePhaseSequence());
     }
 
     private IEnumerator PrePhaseSequence()
     {
-        // Fade-out black screen
-        if (blackScreenAnimator != null)
-            blackScreenAnimator.SetTrigger("Start");
+        // // Fade-out black screen
+        // if (blackScreenAnimator != null)
+        //     blackScreenAnimator.SetTrigger("Start");
 
-        yield return new WaitForSeconds(blackScreenDuration);
+        // yield return new WaitForSeconds(blackScreenDuration);
 
         // Activate first boss (but keep player disabled)
         Phase firstPhase = phases[0];
         if (firstPhase.boss != null)
             firstPhase.boss.SetActive(true);
 
-        // Fade-in black screen
-        if (blackScreenAnimator != null)
-            blackScreenAnimator.SetTrigger("End");
+        // // Fade-in black screen
+        // if (blackScreenAnimator != null)
+        //     blackScreenAnimator.SetTrigger("End");
 
-        yield return new WaitForSeconds(blackScreenDuration);
+        //yield return new WaitForSeconds(blackScreenDuration);
 
         // Wait additional pre-phase countdown
         yield return new WaitForSeconds(prePhaseDelay);
@@ -90,7 +89,11 @@ public class PhaseManager2 : MonoBehaviour
             EnemyHealth bossHealth = currentPhase.boss.GetComponent<EnemyHealth>();
             if (bossHealth != null && bossHealth.currentHealth <= 0)
             {
+                playerHealth.EnableInvincibility();
                 StartCoroutine(TransitionToNextPhase());
+                playerHealth.DisableInvincibility();
+                
+
             }
         }
     }
@@ -125,7 +128,7 @@ public class PhaseManager2 : MonoBehaviour
             }
         }
 
-        // Optional small extra transition delay
+ 
         yield return new WaitForSeconds(transitionDelay);
 
         // Start next phase
