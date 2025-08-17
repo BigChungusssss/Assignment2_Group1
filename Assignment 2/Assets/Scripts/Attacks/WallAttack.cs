@@ -10,9 +10,13 @@ public class WallAttack : AttackBase
     private Rigidbody2D rb;
     [SerializeField]
     private float speed = 5f;
+
+    [Header("Health Settings")]
+    public float maxHealth = 25f;
+    public float currentHealth;
     private void Start()
     {
-        hp = 100;
+        currentHealth = maxHealth;
         cooldown = 5;
         parryable = false;
         rb = GetComponent<Rigidbody2D>();
@@ -22,8 +26,8 @@ public class WallAttack : AttackBase
 
     protected override void StartAttack()
     {
-            StartCoroutine(BulletSequence());
-       
+        StartCoroutine(BulletSequence());
+
     }
 
     private IEnumerator BulletSequence()
@@ -32,5 +36,11 @@ public class WallAttack : AttackBase
         rb.velocity = Vector2.left * speed;
 
     }
+
+    // public void TakeDamage(float amount)
+    // {
+    //     currentHealth -= amount;
+    //     if (currentHealth <= 0) Destroy(gameObject);
+    // }
 
 }

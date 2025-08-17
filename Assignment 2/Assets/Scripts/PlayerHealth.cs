@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
 {
-    public PlayerStats stats;       // Reference to PlayerStats
+    public PlayerStats stats;
+    public GameOverManager gameOver;  
     public float enemyDamage = 50f; 
     public float parryableDamage = 30f;
 
     private PlayerController controller;
     private Collider2D playerCollider;
-    public float invincibilityTime = 1f; // 1 second invincibility
+    public float invincibilityTime = 1f; 
 
     private void Awake()
     {
@@ -23,26 +24,19 @@ public class PlayerHealth : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        // Ignore indestructible enemies
-        // Normal enemies always damage
-        if (collision.CompareTag("Enemy")||collision.CompareTag("IndestructibleEnemy"))
+        if (playerCollider == null || !playerCollider.enabled) return; // Skip damage if collider disabled
+
+        if (collision.CompareTag("Enemy") || collision.CompareTag("IndestructibleEnemy"))
         {
             TakeDamage(enemyDamage);
         }
-        // Parryable objects only damage if player is NOT parrying
         else if (collision.CompareTag("Parry"))
         {
-            if (controller != null && controller.isParryActive)
-            {
-                Debug.Log("Parry blocked damage!");
-                return; // Damage blocked
-            }
-
             TakeDamage(parryableDamage);
         }
     }
 
-    private void TakeDamage(float amount)
+    public void TakeDamage(float amount)
     {
         if (stats == null) return;
 
@@ -57,24 +51,48 @@ public class PlayerHealth : MonoBehaviour
         }
         else
         {
-            // Start temporary invincibility
-            if (playerCollider != null)
-                StartCoroutine(TemporaryInvincibility());
+            StartCoroutine(TemporaryInvincibility());
         }
     }
 
     private IEnumerator TemporaryInvincibility()
     {
-        playerCollider.enabled = false; // Disable collisions
+        if (playerCollider != null)
+            playerCollider.enabled = false; // Disable collider to make player invincible
+
         yield return new WaitForSeconds(invincibilityTime);
-        playerCollider.enabled = true;  // Re-enable collisions
+
+        if (playerCollider != null)
+            playerCollider.enabled = true;  // Re-enable collider
     }
+
+   
+    public void EnableInvincibility()
+    {
+        if (playerCollider != null)
+        {
+            playerCollider.enabled = false; // Disable collisions
+        }
+        Debug.Log("Player is now invincible!");
+    }
+
+
+    public void DisableInvincibility()
+    {
+        if (playerCollider != null)
+        {
+            playerCollider.enabled = true; // Re-enable collisions
+        }
+        Debug.Log("Player invincibility removed!");
+    }
+
+
+
 
     private void Die()
     {
         Debug.Log("Player has died!");
         gameObject.SetActive(false);
-        // Add respawn/game over logic here
+        gameOver.TriggerGameOver();
     }
 }
-

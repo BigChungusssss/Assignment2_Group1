@@ -12,96 +12,56 @@ public class AttackSpawnInfo
     public float animationWindUp = 0.3f;  // seconds to wait before spawning attack prefab
 }
 
-[System.Serializable]
-public class BossPhase
-{
-    public string phaseName = "Phase";
-    public AttackSpawnInfo[] attacks;
-    public Transform[] spawnPoints;
-
-    [Header("Optional Boss Health Trigger")]
-    [Range(0f, 1f)]
-    public float bossHealthThreshold = 0f;
-    public GameObject boss;
-
-    [Header("Phase Transition Delay")]
-    public float phaseTransitionDelay = 1f;
-}
-
 public class BossAttackManager : MonoBehaviour
 {
     [Header("Spawner Settings")]
-    public BossPhase[] phases;
+    public AttackSpawnInfo[] attacks;
+    public Transform[] spawnPoints;
+    public GameObject boss;
 
-    private int currentPhaseIndex = 0;
     private float[] attackTimers;
-    private bool isTransitioning = false;
 
     void Start()
     {
-        if (phases.Length > 0)
-            InitializePhase(currentPhaseIndex);
+        if (attacks.Length > 0)
+            attackTimers = new float[attacks.Length];
     }
 
     void Update()
     {
-        if (phases.Length == 0) return;
+        if (attacks == null || attacks.Length == 0) return;
+        if (spawnPoints == null || spawnPoints.Length == 0) return;
 
-        BossPhase currentPhase = phases[currentPhaseIndex];
-        if (currentPhase.attacks == null || currentPhase.attacks.Length == 0) return;
-        if (currentPhase.spawnPoints.Length == 0) return;
-
-        // Boss health phase trigger
-        if (!isTransitioning && currentPhase.boss != null && currentPhase.bossHealthThreshold > 0f)
-        {
-            EnemyHealth bossHealth = currentPhase.boss.GetComponent<EnemyHealth>();
-            if (bossHealth != null)
-            {
-                float healthPercentage = (float)bossHealth.CurrentHealth / bossHealth.maxHealth;
-                if (healthPercentage <= currentPhase.bossHealthThreshold)
-                {
-                    StartCoroutine(TransitionToNextPhase(currentPhase.phaseTransitionDelay));
-                }
-            }
-        }
-
-        // Attack spawn logic
-        for (int i = 0; i < currentPhase.attacks.Length; i++)
+        for (int i = 0; i < attacks.Length; i++)
         {
             attackTimers[i] += Time.deltaTime;
 
-            if (attackTimers[i] >= currentPhase.attacks[i].interval)
+            if (attackTimers[i] >= attacks[i].interval)
             {
-                Transform spawnPoint = currentPhase.spawnPoints[Random.Range(0, currentPhase.spawnPoints.Length)];
+                Transform spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
                 Vector3 spawnPos = spawnPoint.position;
                 spawnPos.z = 0f;
 
-                // Pause boss if required
-                if (currentPhase.attacks[i].pauseBossOnSpawn && currentPhase.boss != null)
+                if (attacks[i].pauseBossOnSpawn && boss != null)
                 {
-                    BossVerticalFigureEight bossMove = currentPhase.boss.GetComponent<BossVerticalFigureEight>();
+                    BossVerticalFigureEight bossMove = boss.GetComponent<BossVerticalFigureEight>();
+                    Animator bossAnim = boss.GetComponent<Animator>();
                     if (bossMove != null)
                     {
-                        StartCoroutine(PauseAnimateAndSpawn(
-                            bossMove,
-                            currentPhase.boss.GetComponent<Animator>(),
-                            currentPhase.attacks[i],
-                            spawnPos,
-                            spawnPoint.rotation
-                        ));
+                        StartCoroutine(PauseAnimateAndSpawn(bossMove, bossAnim, attacks[i], spawnPos, spawnPoint.rotation));
                     }
                 }
                 else
                 {
-                    // If no pause, just trigger animation and spawn
-                    if (currentPhase.boss != null && !string.IsNullOrEmpty(currentPhase.attacks[i].attackAnimationTrigger))
+                    // Trigger animation if available
+                    if (boss != null && !string.IsNullOrEmpty(attacks[i].attackAnimationTrigger))
                     {
-                        Animator bossAnim = currentPhase.boss.GetComponent<Animator>();
+                        Animator bossAnim = boss.GetComponent<Animator>();
                         if (bossAnim != null)
-                            bossAnim.SetTrigger(currentPhase.attacks[i].attackAnimationTrigger);
+                            bossAnim.SetTrigger(attacks[i].attackAnimationTrigger);
                     }
 
-                    StartCoroutine(SpawnAttackWithDelay(currentPhase.attacks[i], spawnPos, spawnPoint.rotation));
+                    StartCoroutine(SpawnAttackWithDelay(attacks[i], spawnPos, spawnPoint.rotation));
                 }
 
                 attackTimers[i] = 0f;
@@ -109,63 +69,19 @@ public class BossAttackManager : MonoBehaviour
         }
     }
 
-    private void InitializePhase(int phaseIndex)
-    {
-        BossPhase currentPhase = phases[phaseIndex];
-        attackTimers = new float[currentPhase.attacks.Length];
-    }
-
-    private IEnumerator TransitionToNextPhase(float delay)
-    {
-        if (isTransitioning) yield break;
-        isTransitioning = true;
-
-        yield return new WaitForSeconds(delay);
-
-        NextPhase();
-    }
-
-    public void NextPhase()
-    {
-        currentPhaseIndex++;
-        if (currentPhaseIndex >= phases.Length)
-        {
-            currentPhaseIndex = phases.Length - 1;
-            isTransitioning = false;
-            return;
-        }
-
-        InitializePhase(currentPhaseIndex);
-        isTransitioning = false;
-    }
-
-    public void ResetSpawner()
-    {
-        currentPhaseIndex = 0;
-        InitializePhase(currentPhaseIndex);
-        enabled = true;
-        isTransitioning = false;
-    }
-
-    // --- New coroutine for pause, animation, and spawn ---
+    // --- Coroutine for pause, animation, and spawn ---
     private IEnumerator PauseAnimateAndSpawn(BossVerticalFigureEight bossMove, Animator bossAnim, AttackSpawnInfo attack, Vector3 spawnPos, Quaternion rotation)
     {
-        bossMove.StopMovement(); // stop movement
+        bossMove.StopMovement();
 
-        // Trigger animation if available
         if (bossAnim != null && !string.IsNullOrEmpty(attack.attackAnimationTrigger))
-        {
             bossAnim.SetTrigger(attack.attackAnimationTrigger);
-        }
 
-        // Wait for the wind-up + optional pause duration
         float waitTime = Mathf.Max(attack.animationWindUp, attack.bossPauseDuration);
         yield return new WaitForSeconds(waitTime);
 
-        // Instantiate the attack prefab
         Instantiate(attack.attackPrefab, spawnPos, rotation);
 
-        // Resume boss movement
         bossMove.ResumeMovement();
     }
 

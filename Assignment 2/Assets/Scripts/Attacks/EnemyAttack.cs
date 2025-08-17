@@ -25,9 +25,12 @@ public class EnemyAttack : AttackBase
     private Rigidbody2D rb;
     private int num;
 
+    [Header("Health Settings")]
+    public float maxHealth = 10f;
+    public float currentHealth;
+
     private void Start()
     {
-        hp = 100;
         rb = GetComponent<Rigidbody2D>();
         num = Random.Range(1, 6);
         StartAttack();
@@ -46,7 +49,7 @@ public class EnemyAttack : AttackBase
     {
         // Move phase
         yield return new WaitForSeconds(travelTime);
-        rb.velocity = Vector2.zero; 
+        rb.velocity = Vector2.zero;
 
         // Wait before firing
         yield return new WaitForSeconds(fireDelay);
@@ -54,7 +57,7 @@ public class EnemyAttack : AttackBase
         // Fire at player
         if (player != null)
         {
-            if(num != 4)
+            if (num != 4)
             {
                 Vector2 direction = (player.position - transform.position).normalized;
                 GameObject bullet = Instantiate(smallBullet, transform.position, Quaternion.identity);
@@ -72,8 +75,11 @@ public class EnemyAttack : AttackBase
             }
         }
 
-        Destroy(gameObject); 
+        Destroy(gameObject);
     }
+
+
+    
 
     
 }

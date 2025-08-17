@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 9157942608873842088}
   m_Layer: 0
   m_Name: StarBullet
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -164,7 +164,6 @@ MonoBehaviour:
   hp: 0
   cooldown: 2
   parryable: 0
-  speed: 5
   slowSpeed: 1.5
   lifetime: 3.5
   smallBullet: {fileID: 3665263810696704340, guid: ebead70cc38d4b24789dc57e439daa20, type: 3}
