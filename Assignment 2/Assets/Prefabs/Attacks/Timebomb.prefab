@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 3490164239484771030}
   m_Layer: 0
   m_Name: Timebomb
-  m_TagString: Enemy
+  m_TagString: IndestructibleEnemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -167,3 +167,5 @@ MonoBehaviour:
   speed: 2.5
   lifetime: 10
   explosionPrefab: {fileID: 7421584300911702113, guid: 0ae8b3fd01fcac74b9a301275813fa41, type: 3}
+  maxHealth: 10
+  currentHealth: 0

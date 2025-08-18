@@ -171,3 +171,5 @@ MonoBehaviour:
   smallBulletParry: {fileID: 3702894903507581139, guid: 69cc9adda38733e41b1eebedc2f8ef05, type: 3}
   fireDelay: 1
   smallBulletSpeed: 9
+  maxHealth: 10
+  currentHealth: 0

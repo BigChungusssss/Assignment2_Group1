@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyAttack : AttackBase
+public class EnemyAttack : AttackBase, IDamageable
 {
     //movement
     [SerializeField]
@@ -31,6 +31,7 @@ public class EnemyAttack : AttackBase
 
     private void Start()
     {
+        currentHealth = maxHealth;
         rb = GetComponent<Rigidbody2D>();
         num = Random.Range(1, 6);
         StartAttack();
@@ -77,6 +78,14 @@ public class EnemyAttack : AttackBase
 
         Destroy(gameObject);
     }
+
+    public void TakeDamage(float amount)
+    {
+        currentHealth -= amount;
+        if (currentHealth <= 0) Destroy(gameObject);
+    }
+    
+
 
 
     

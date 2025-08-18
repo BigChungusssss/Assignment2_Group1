@@ -13,6 +13,8 @@ public class PhaseManager2 : MonoBehaviour
 {
     [Header("Phase Settings")]
     public Phase[] phases;
+
+    public GameObject victoryUI; // assign in inspector
     public MonoBehaviour playerController;
     public PlayerHealth playerHealth;
     public Gun playerGun;                 
@@ -20,6 +22,8 @@ public class PhaseManager2 : MonoBehaviour
     public float prePhaseDelay = 5f;       // Countdown after fade-in for first phase
     public float transitionDelay = 1f;     
     public float blackScreenDuration = 1f; 
+
+
 
     private int currentPhaseIndex = -1;    
     private bool phaseActive = false;
@@ -145,6 +149,9 @@ public class PhaseManager2 : MonoBehaviour
         if (currentPhaseIndex >= phases.Length)
         {
             Debug.Log("All phases completed!");
+            if (victoryUI != null)
+               victoryUI.SetActive(true);
+
             yield break;
         }
 
@@ -178,7 +185,8 @@ public class PhaseManager2 : MonoBehaviour
         
 
         phaseActive = true;
-         playerHealth.DisableInvincibility();
+        yield return new WaitForSeconds(0.7f);
+        playerHealth.DisableInvincibility();
         Debug.Log("Phase started: " + nextPhase.phaseName);
     }
 
