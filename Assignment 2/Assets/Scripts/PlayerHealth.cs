@@ -32,7 +32,7 @@ public class PlayerHealth : MonoBehaviour
         }
         else if (collision.CompareTag("Parry"))
         {
-            TakeDamage(parryableDamage);
+            TakeDamage(enemyDamage);
         }
     }
 

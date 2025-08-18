@@ -28,7 +28,7 @@ public class StarSplitAttack : AttackBase
     {;
         cooldown = 5;
         rb = GetComponent<Rigidbody2D>();
-        speed = Random.Range(8, 15);
+        speed = Random.Range(6, 9);
         StartAttack();
         Destroy(gameObject, lifetime); 
     }

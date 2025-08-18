@@ -148,7 +148,7 @@ Transform:
   m_GameObject: {fileID: 75961896}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.1, y: -2.8, z: 10}
+  m_LocalPosition: {x: 1.91, y: -2.8, z: 10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -172,7 +172,7 @@ MonoBehaviour:
   - enemyPrefab: {fileID: 6433595211940171147, guid: b712b88a9dd20304c81bc4eeb99d54af, type: 3}
   spawnPoints:
   - {fileID: 1548829933}
-  spawnInterval: 5
+  spawnInterval: 3
 --- !u!1 &94536691
 GameObject:
   m_ObjectHideFlags: 0
@@ -508,13 +508,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attacks:
   - attackPrefab: {fileID: 3527395051709181868, guid: 446aa47a245f9004082ae7aa1cd3b131, type: 3}
-    interval: 7
+    interval: 5
     pauseBossOnSpawn: 1
     bossPauseDuration: 0
     attackAnimationTrigger: 
     animationWindUp: 0
   - attackPrefab: {fileID: 3351603412258444327, guid: d1f2e2f90970a5b41953d8148e7c299d, type: 3}
-    interval: 27
+    interval: 12
+    pauseBossOnSpawn: 0
+    bossPauseDuration: 0.5
+    attackAnimationTrigger: 
+    animationWindUp: 0
+  - attackPrefab: {fileID: 4281962842454993191, guid: 1354a506c1a982c4c929d8681467224f, type: 3}
+    interval: 22
     pauseBossOnSpawn: 0
     bossPauseDuration: 0
     attackAnimationTrigger: 
@@ -819,7 +825,7 @@ MonoBehaviour:
   spawnPoints:
   - {fileID: 94536692}
   - {fileID: 1006739823}
-  spawnInterval: 5
+  spawnInterval: 5.5
 --- !u!224 &341214432 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1724936197242638392, guid: 85973d789dfcb0d4bb998aac20e66a7a, type: 3}
@@ -1521,7 +1527,7 @@ Transform:
   m_GameObject: {fileID: 697599802}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.5, y: 0.37, z: 0}
+  m_LocalPosition: {x: -0.75, y: 0.37, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1653,7 +1659,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 883989480bb3ad942ab85410d7b4cb8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 1000
+  maxHealth: 250
   currentHealth: 0
 --- !u!60 &745283022
 PolygonCollider2D:
@@ -1733,9 +1739,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   radius: 1
-  speed: 1
+  speed: 1.5
   pauseTime: 0.01
-  verticalStretch: 10
+  verticalStretch: 1
   resumeSmoothTime: 0.01
   isMovementPaused: 0
 --- !u!212 &745283024
@@ -2393,9 +2399,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 859378e500fe792428fe136125fd7ecf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerHealth: {fileID: 1155176339}
   mainCamera: {fileID: 519420031}
-  respawnPoint: {fileID: 1772418723}
 --- !u!1 &1295645952
 GameObject:
   m_ObjectHideFlags: 0
@@ -2421,7 +2425,7 @@ Transform:
   m_GameObject: {fileID: 1295645952}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.37, y: -0.01, z: 0}
+  m_LocalPosition: {x: -0.75, y: -0.01, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2680,7 +2684,7 @@ Transform:
   m_GameObject: {fileID: 1548829932}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 9.48, y: -0.1, z: 0.03950882}
+  m_LocalPosition: {x: 11.39, y: -0.1, z: 0.03950882}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2732,15 +2736,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attacks:
   - attackPrefab: {fileID: 7571571103634609859, guid: 282d3903f4035f74da845044c6e4c717, type: 3}
-    interval: 7
+    interval: 3.5
     pauseBossOnSpawn: 1
     bossPauseDuration: 0
     attackAnimationTrigger: 
     animationWindUp: 0
   spawnPoints:
-  - {fileID: 2027517926}
-  - {fileID: 1295645953}
-  - {fileID: 697599803}
+  - {fileID: 210247843}
+  - {fileID: 988538033}
+  - {fileID: 1656125787}
   boss: {fileID: 1845215410}
 --- !u!1 &1656125786
 GameObject:
@@ -3227,7 +3231,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 883989480bb3ad942ab85410d7b4cb8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
+  maxHealth: 450
   currentHealth: 0
 --- !u!1 &1854480133
 GameObject:
@@ -3630,8 +3634,8 @@ MonoBehaviour:
   currentFireMode: 3
   projectileCount: 5
   spreadAngle: 45
-  streamFireRate: 0.1
-  sniperCooldown: 1
+  streamFireRate: 0.5
+  sniperCooldown: 0.35
   sniperProjectileSpeed: 5
   sniperKnockbackForce: 5
   revolverClipSize: 6
@@ -3739,7 +3743,7 @@ Transform:
   m_GameObject: {fileID: 2027517925}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.29, y: -0.39, z: 0}
+  m_LocalPosition: {x: -0.75, y: -0.39, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

@@ -90,7 +90,7 @@ public class SplitShotAttack : AttackBase
         {
             SpawnSplitBullet(205f);
         }
-
+        SpawnSplitBullet(0f);
         //Destroy the main bullet
         Destroy(gameObject);
     }

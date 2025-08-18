@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2056430415386796694}
   m_Layer: 0
   m_Name: Part 2
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -27,8 +27,8 @@ Transform:
   m_GameObject: {fileID: 911148454952168995}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -2.5955, z: -0.052363984}
-  m_LocalScale: {x: 1, y: 3.6562884, z: 1}
+  m_LocalPosition: {x: 0, y: -2.3617, z: -0.052363984}
+  m_LocalScale: {x: 1, y: 9.112312, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7083686002548153801}
@@ -208,7 +208,7 @@ MonoBehaviour:
   cooldown: 3
   parryable: 0
   lifetime: 6
-  speed: 6.5
+  speed: 8.5
 --- !u!1 &6316585607988048600
 GameObject:
   m_ObjectHideFlags: 0
@@ -222,7 +222,7 @@ GameObject:
   - component: {fileID: 7994014477146201642}
   m_Layer: 0
   m_Name: Part 1
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -236,8 +236,8 @@ Transform:
   m_GameObject: {fileID: 6316585607988048600}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 3.9626, z: -0.052363984}
-  m_LocalScale: {x: 1, y: 3.8772173, z: 1}
+  m_LocalPosition: {x: 0, y: 5.3099, z: -0.052363984}
+  m_LocalScale: {x: 1, y: 1.1825513, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7083686002548153801}

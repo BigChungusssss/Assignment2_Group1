@@ -27,8 +27,8 @@ Transform:
   m_GameObject: {fileID: 4116681174028221232}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -3.3951, z: -0.052363984}
-  m_LocalScale: {x: 1, y: 2.05702, z: 1}
+  m_LocalPosition: {x: 0, y: -5.4321, z: -0.052363984}
+  m_LocalScale: {x: 1, y: 6.130948, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5726460768338185626}
@@ -143,7 +143,7 @@ GameObject:
   - component: {fileID: 7052734894406100607}
   m_Layer: 0
   m_Name: WallBreak_3
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -208,7 +208,7 @@ MonoBehaviour:
   cooldown: 3
   parryable: 0
   lifetime: 6
-  speed: 6.5
+  speed: 8.5
 --- !u!1 &7800657966632970251
 GameObject:
   m_ObjectHideFlags: 0
