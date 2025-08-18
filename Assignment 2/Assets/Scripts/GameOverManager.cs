@@ -41,7 +41,7 @@ public class GameOverManager : MonoBehaviour
         }
 
         // Restart current scene
-        Time.timeScale = 1f; 
-        SceneManager.LoadScene(0);
+        //Time.timeScale = 1f; 
+        //SceneManager.LoadScene(0);
     }
 }
