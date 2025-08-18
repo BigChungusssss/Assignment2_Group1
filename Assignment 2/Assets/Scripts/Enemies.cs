@@ -5,67 +5,47 @@ using UnityEngine;
 public class EnemySpawnInfo
 {
     public GameObject enemyPrefab;
-    public float interval = 1f;    // interval between spawns
 }
 
 public class Enemies : MonoBehaviour
 {
     [Header("Spawner Settings")]
-    public EnemySpawnInfo[] enemies;
-    public Transform[] spawnPoints;
-    public GameObject boss; // optional boss for health trigger
-    [Range(0f, 1f)]
-    //public float bossHealthThreshold = 0f; // 0 = disabled
+    public EnemySpawnInfo[] enemies;   // just the prefabs
+    public Transform[] spawnPoints;    // spawn locations
+    public float spawnInterval = 2f;   // one global interval
 
-    private float[] enemyTimers;
-
-    void Start()
-    {
-        if (enemies.Length > 0)
-            enemyTimers = new float[enemies.Length];
-    }
+    private float spawnTimer;
 
     void Update()
     {
         if (enemies == null || enemies.Length == 0) return;
         if (spawnPoints == null || spawnPoints.Length == 0) return;
 
-        // Check boss health trigger
-        // if (boss != null && bossHealthThreshold > 0f)
-        // {
-        //     EnemyHealth bossHealth = boss.GetComponent<EnemyHealth>();
-        //     // if (bossHealth != null)
-        //     // {
-        //     //     float healthPercentage = (float)bossHealth.CurrentHealth / bossHealth.maxHealth;
-        //     //     if (healthPercentage <= bossHealthThreshold)
-        //     //     {
-        //     //         // Optional: trigger some event here if boss reaches threshold
-        //     //     }
-        //     // }
-        // }
+        spawnTimer += Time.deltaTime;
 
-        // Spawn enemies continuously
-        for (int i = 0; i < enemies.Length; i++)
+        if (spawnTimer >= spawnInterval)
         {
-            enemyTimers[i] += Time.deltaTime;
+            // Pick random enemy
+            EnemySpawnInfo chosenEnemy = enemies[Random.Range(0, enemies.Length)];
 
-            if (enemyTimers[i] >= enemies[i].interval)
-            {
-                Transform spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
-                Vector3 spawnPos = spawnPoint.position;
-                spawnPos.z = 0f;
+            // Pick random spawn point
+            Transform spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
 
-                Instantiate(enemies[i].enemyPrefab, spawnPos, spawnPoint.rotation);
+            // Force Z = 0
+            Vector3 spawnPos = spawnPoint.position;
+            spawnPos.z = 0f;
 
-                enemyTimers[i] = 0f;
-            }
+            // Spawn enemy
+            Instantiate(chosenEnemy.enemyPrefab, spawnPos, spawnPoint.rotation);
+
+            // Reset timer
+            spawnTimer = 0f;
         }
     }
 
     public void ResetSpawner()
     {
-        if (enemies.Length > 0)
-            enemyTimers = new float[enemies.Length];
+        spawnTimer = 0f;
     }
 }
 
