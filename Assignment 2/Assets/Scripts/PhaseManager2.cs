@@ -185,7 +185,7 @@ public class PhaseManager2 : MonoBehaviour
         
 
         phaseActive = true;
-        yield return new WaitForSeconds(0.7f);
+        yield return new WaitForSeconds(2.5f);
         playerHealth.DisableInvincibility();
         Debug.Log("Phase started: " + nextPhase.phaseName);
     }
