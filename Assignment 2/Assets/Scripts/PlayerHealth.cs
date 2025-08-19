@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
@@ -11,7 +10,11 @@ public class PlayerHealth : MonoBehaviour
 
     private PlayerController controller;
     private Collider2D playerCollider;
+    private SpriteRenderer spriteRenderer;
+    private Color originalColor;
+
     public float invincibilityTime = 1f; 
+    public float blinkInterval = 0.1f; // how fast player blinks
 
     private void Awake()
     {
@@ -20,6 +23,10 @@ public class PlayerHealth : MonoBehaviour
 
         controller = GetComponent<PlayerController>();
         playerCollider = GetComponent<Collider2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+
+        if (spriteRenderer != null)
+            originalColor = spriteRenderer.color;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -60,13 +67,26 @@ public class PlayerHealth : MonoBehaviour
         if (playerCollider != null)
             playerCollider.enabled = false; // Disable collider to make player invincible
 
-        yield return new WaitForSeconds(invincibilityTime);
+        float elapsed = 0f;
+        while (elapsed < invincibilityTime)
+        {
+            if (spriteRenderer != null)
+            {
+                // Toggle between black and original
+                spriteRenderer.color = (spriteRenderer.color == originalColor) ? Color.black : originalColor;
+            }
+
+            yield return new WaitForSeconds(blinkInterval);
+            elapsed += blinkInterval;
+        }
 
         if (playerCollider != null)
             playerCollider.enabled = true;  // Re-enable collider
+
+        if (spriteRenderer != null)
+            spriteRenderer.color = originalColor; // Restore color
     }
 
-   
     public void EnableInvincibility()
     {
         if (playerCollider != null)
@@ -75,7 +95,6 @@ public class PlayerHealth : MonoBehaviour
         }
         Debug.Log("Player is now invincible!");
     }
-
 
     public void DisableInvincibility()
     {
@@ -86,9 +105,6 @@ public class PlayerHealth : MonoBehaviour
         Debug.Log("Player invincibility removed!");
     }
 
-
-
-
     private void Die()
     {
         Debug.Log("Player has died!");
@@ -96,3 +112,4 @@ public class PlayerHealth : MonoBehaviour
         gameOver.TriggerGameOver();
     }
 }
+
