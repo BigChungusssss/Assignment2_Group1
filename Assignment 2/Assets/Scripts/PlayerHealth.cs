@@ -12,6 +12,7 @@ public class PlayerHealth : MonoBehaviour
     private Collider2D playerCollider;
     private SpriteRenderer spriteRenderer;
     private Color originalColor;
+    public GameObject alienDamage;
 
     public float invincibilityTime = 1f; 
     public float blinkInterval = 0.1f; // how fast player blinks
@@ -73,7 +74,8 @@ public class PlayerHealth : MonoBehaviour
             if (spriteRenderer != null)
             {
                 // Toggle between black and original
-                spriteRenderer.color = (spriteRenderer.color == originalColor) ? Color.black : originalColor;
+                //spriteRenderer.color = (spriteRenderer.color == originalColor) ? Color.black : originalColor;
+                alienDamage.SetActive(true);
             }
 
             yield return new WaitForSeconds(blinkInterval);
@@ -84,7 +86,8 @@ public class PlayerHealth : MonoBehaviour
             playerCollider.enabled = true;  // Re-enable collider
 
         if (spriteRenderer != null)
-            spriteRenderer.color = originalColor; // Restore color
+            alienDamage.SetActive(false);
+            //spriteRenderer.color = originalColor; // Restore color
     }
 
     public void EnableInvincibility()

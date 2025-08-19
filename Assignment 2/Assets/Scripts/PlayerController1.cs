@@ -14,6 +14,9 @@ public class PlayerController : MonoBehaviour
     public PlayerHealth playerHealth;
     public float movementSpeed = 1f;
 
+    [Header("Animations")]
+    public Animator alienAnim;
+
     [Header("Normal Gun")]
     public Gun gun;
     public float shootCooldown = 0.5f;
@@ -131,8 +134,12 @@ public class PlayerController : MonoBehaviour
         {
             moveVector = dashDirection * parryDashSpeed;
             dashTime -= Time.fixedDeltaTime;
+            alienAnim.SetBool("isDashing",true);
             if (dashTime <= 0f)
+            {
                 isDashing = false;
+                alienAnim.SetBool("isDashing",false);
+            }
         }
 
         Vector2 finalPos = rbody.position + moveVector * Time.fixedDeltaTime;
