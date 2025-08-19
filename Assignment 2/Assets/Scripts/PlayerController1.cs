@@ -7,6 +7,9 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     public static PlayerController instance;
+    private SpriteRenderer spriteRenderer;
+
+    private Color originalColor;
 
     public PlayerHealth playerHealth;
     public float movementSpeed = 1f;
@@ -75,6 +78,7 @@ public class PlayerController : MonoBehaviour
     public float parryWindow = 0.2f;
     public bool isParryActive = false;
     private float parryTimer = 0f;
+    private Coroutine parryBlinkCoroutine;
 
     [Header("Parry Dash")]
     public float parryDashDistance = 3f;
@@ -224,7 +228,7 @@ public class PlayerController : MonoBehaviour
             if (cardImages[i] != null)
                 cardImages[i].SetActive(false);
         }
-    
+
     }
 
     public void RevertTransformation()
@@ -346,6 +350,11 @@ public class PlayerController : MonoBehaviour
         Destroy(parriedObject);
         AddCard(1);
         EndParry();
+        if (parryBlinkCoroutine != null)
+            StopCoroutine(parryBlinkCoroutine);
+
+        parryBlinkCoroutine = StartCoroutine(BlinkPink(0.6f, 0.1f));
+    
     }
 
     void UpdateColliderToMatchSprite()
@@ -380,6 +389,28 @@ public class PlayerController : MonoBehaviour
                 cardImages[i].SetActive(i < currentCards);
         }
     }
+    private IEnumerator BlinkPink(float duration = 0.5f, float interval = 0.1f)
+    {
+        float elapsed = 0f;
+        Color pink = new Color(1f, 0.4f, 0.7f); // nice pink tone
+
+        while (elapsed < duration)
+        {
+            if (spriteRenderer != null)
+            {
+                // Toggle color between pink and original
+                spriteRenderer.color = (spriteRenderer.color == originalColor) ? pink : originalColor;
+            }
+
+            yield return new WaitForSeconds(interval);
+            elapsed += interval;
+        }
+
+        // Restore original color at the end
+        if (spriteRenderer != null)
+            spriteRenderer.color = originalColor;
+    }
+
 
 }
 
