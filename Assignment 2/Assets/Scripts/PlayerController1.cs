@@ -96,6 +96,11 @@ public class PlayerController : MonoBehaviour
         controls = new Control();
         rbody = GetComponent<Rigidbody2D>();
         normalScale = transform.localScale;
+        spriteRenderer = GetComponent<SpriteRenderer>();
+
+
+        if (spriteRenderer != null)
+            originalColor = spriteRenderer.color;
     }
 
     private void OnEnable() => controls.Enable();
