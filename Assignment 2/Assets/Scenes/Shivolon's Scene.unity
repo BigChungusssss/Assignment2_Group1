@@ -1326,6 +1326,7 @@ MonoBehaviour:
   playerHealth: {fileID: 1155176339}
   player: {fileID: 1155176335}
   contactDamage: 50
+  invincibilityDelay: 1
 --- !u!50 &584480815
 Rigidbody2D:
   serializedVersion: 4
@@ -2438,6 +2439,7 @@ MonoBehaviour:
   enemyDamage: 1
   parryableDamage: 2
   invincibilityTime: 2
+  blinkInterval: 0.1
 --- !u!114 &1155176340
 MonoBehaviour:
   m_ObjectHideFlags: 0
