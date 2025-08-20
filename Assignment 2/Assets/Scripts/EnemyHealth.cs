@@ -1,9 +1,13 @@
 using UnityEngine;
+using System.Collections;
 
 public class EnemyHealth : MonoBehaviour, IDamageable
 {
     public float maxHealth = 100f;
     public float currentHealth;
+
+    private SpriteRenderer spriteRenderer;
+    private Color originalColor;
 
     private bool isDead = false;
     private Rigidbody2D rb;
@@ -23,11 +27,35 @@ public class EnemyHealth : MonoBehaviour, IDamageable
         if (isDead) return;
 
         currentHealth -= amount;
+       // StartCoroutine(FlashDamage());
 
         if (currentHealth <= 0)
         {
             Die();
         }
+    }
+
+
+     private IEnumerator FlashDamage()
+    {
+        
+        float elapsed = 0f;
+        while (elapsed < 2f)
+        {
+            if (spriteRenderer != null)
+            {
+                // Toggle between black and original
+                spriteRenderer.color = (spriteRenderer.color == originalColor) ? Color.red : originalColor;
+                
+            }
+
+            yield return new WaitForSeconds(0.08f);
+            elapsed += 0.08f;
+        }
+
+        if (spriteRenderer != null)
+            spriteRenderer.color = originalColor;
+           
     }
 
     void Update()
