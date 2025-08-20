@@ -6,8 +6,7 @@ public class EnemyHealth : MonoBehaviour, IDamageable
     public float maxHealth = 100f;
     public float currentHealth;
 
-    private SpriteRenderer spriteRenderer;
-    private Color originalColor;
+    [SerializeField] public GameObject enemyDamage;
 
     private bool isDead = false;
     private Rigidbody2D rb;
@@ -27,7 +26,7 @@ public class EnemyHealth : MonoBehaviour, IDamageable
         if (isDead) return;
 
         currentHealth -= amount;
-       // StartCoroutine(FlashDamage());
+        StartCoroutine(FlashDamage());
 
         if (currentHealth <= 0)
         {
@@ -42,19 +41,19 @@ public class EnemyHealth : MonoBehaviour, IDamageable
         float elapsed = 0f;
         while (elapsed < 2f)
         {
-            if (spriteRenderer != null)
-            {
+            
+            
                 // Toggle between black and original
-                spriteRenderer.color = (spriteRenderer.color == originalColor) ? Color.red : originalColor;
+                enemyDamage.SetActive(true);
                 
-            }
+            
 
             yield return new WaitForSeconds(0.08f);
             elapsed += 0.08f;
         }
 
-        if (spriteRenderer != null)
-            spriteRenderer.color = originalColor;
+   
+            enemyDamage.SetActive(false);
            
     }
 
