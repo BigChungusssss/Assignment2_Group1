@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 8991234402596042821}
   - component: {fileID: 5051389648818767057}
   - component: {fileID: 84489776908925809}
-  - component: {fileID: 3810918069874972810}
   - component: {fileID: 9157942608873842088}
+  - component: {fileID: 5757247277587543687}
   m_Layer: 0
   m_Name: StarBullet
   m_TagString: Enemy
@@ -28,13 +28,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7571571103634609859}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
   m_LocalPosition: {x: 2.44, y: -3.96, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
 --- !u!212 &5051389648818767057
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -76,8 +76,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 2
-  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 0.79622644, g: 0.6958176, b: 0.022534575, a: 1}
+  m_Sprite: {fileID: 21300000, guid: e6307bc6fdb9fe94ea6343851d9c5612, type: 3}
+  m_Color: {r: 0.5849056, g: 0.1331306, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -114,8 +114,29 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!58 &3810918069874972810
-CircleCollider2D:
+--- !u!114 &9157942608873842088
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7571571103634609859}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 494250cb75949704881b3e7bce71fd84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hp: 0
+  cooldown: 2
+  parryable: 0
+  slowSpeed: 1.5
+  lifetime: 3.5
+  smallBullet: {fileID: 3665263810696704340, guid: ebead70cc38d4b24789dc57e439daa20, type: 3}
+  smallBulletParry: {fileID: 3702894903507581139, guid: 69cc9adda38733e41b1eebedc2f8ef05, type: 3}
+  timeBeforeSplit: 1
+  isMainBullet: 1
+--- !u!70 &5757247277587543687
+CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -146,27 +167,6 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.5
---- !u!114 &9157942608873842088
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7571571103634609859}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 494250cb75949704881b3e7bce71fd84, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hp: 0
-  cooldown: 2
-  parryable: 0
-  slowSpeed: 1.5
-  lifetime: 3.5
-  smallBullet: {fileID: 3665263810696704340, guid: ebead70cc38d4b24789dc57e439daa20, type: 3}
-  smallBulletParry: {fileID: 3702894903507581139, guid: 69cc9adda38733e41b1eebedc2f8ef05, type: 3}
-  timeBeforeSplit: 1
-  isMainBullet: 1
+  m_Offset: {x: -0.06736278, y: 0.028067585}
+  m_Size: {x: 1.5319432, y: 0.52150625}
+  m_Direction: 1
